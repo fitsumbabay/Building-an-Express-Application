@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
 const app = express();
-const port = 3001;
+const port = process.env.PORT || 3001;
 
 
 // Set EJS as the view engine
@@ -11,7 +11,7 @@ app.set("views", path.join(__dirname, "views"));
 
 
 // Serve static files
-app.use(express.static('./styles'));
+app.use(express.static(path.join(__dirname, "public")));
 
 
 // Middleware to log request details
@@ -23,9 +23,6 @@ app.use((req, res, next) => {
 // Body parser middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.listen(port, () => {
-  console.log(`Server listening on port: ${port}.`);
-});
 
 app.get("/", (req, res) => {
   res.render("index");
@@ -43,7 +40,7 @@ app.post("/submit", (req, res) => {
 
 // Route to download the image
 app.get('/download', function(req, res) {
-    const file = __dirname + '/styles/images/images (1).jpg'; // Path to the image
+    const file = __dirname + '/images/images (1).jpg'; // Path to the image
     res.download(file, "images (1).jpg", (err) => {
       if (err) {
         console.error("Error while downloading file:", err);
@@ -57,20 +54,3 @@ app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
 
-// http://localhost:3000 
-//git remote add origin YOUR_GITHUB_REPO_URL
-//git push -u origin master
-
-// Middleware to parse JSON bodies
-// app.use(express.json());
-
-// app.post("/user", (req, res) => {
-//   const userData = req.body;
-//   console.log("Received user data:", userData);
-  
-//   res.send("User data received successfully!");
-// });
-
-// app.listen(3000, () => {
-//   console.log("Server is running on port 3000");
-// });
